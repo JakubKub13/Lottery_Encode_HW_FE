@@ -243,7 +243,7 @@ export class LotteryService {
       const lotteryContract = await this.getLotteryContract()
       const tokenPurchaseTxn = await lotteryContract
         .connect(currentWallet)
-        ['sellLotteryTokens']({
+        ['purchaseTokens']({
           value: ethers.utils.parseEther(lotteryTokenAmount),
         })
 
