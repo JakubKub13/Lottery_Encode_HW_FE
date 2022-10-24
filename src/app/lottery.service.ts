@@ -343,7 +343,7 @@ export class LotteryService {
 
     try {
       const lotteryContract = await this.getLotteryContract()
-      accumulatedFees = await lotteryContract['feeCollection']()
+      accumulatedFees = await lotteryContract['ownerWithdraw']()
 
       return bigNumberToETHString(accumulatedFees)
     } catch (error) {
@@ -357,7 +357,7 @@ export class LotteryService {
   async isLotteryRollAvailable() {
     try {
       const lotteryContract = await this.getLotteryContract()
-      const isLotteryOpenForBetting = await lotteryContract['lotteryOpen']()
+      const isLotteryOpenForBetting = await lotteryContract['openBets']()
 
       const currentlySetLotteryContractClosingEpoch = (
         await lotteryContract['lotteryClosingEpochInSeconds']()
