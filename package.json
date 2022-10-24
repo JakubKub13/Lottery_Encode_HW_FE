@@ -20,6 +20,7 @@
     "@angular/router": "^14.2.0",
     "@ng-bootstrap/ng-bootstrap": "^13.1.0",
     "@popperjs/core": "^2.11.6",
+    "angular-new-router": "angular/router",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
     "dotenv": "^16.0.3",

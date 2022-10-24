@@ -13,9 +13,6 @@ import { WagerComponent } from './wager/wager.component';
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    HomeComponent,
-    HelpersComponent,
     AdminComponent,
     LandingComponent,
     WagerComponent
