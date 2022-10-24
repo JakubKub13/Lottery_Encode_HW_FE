@@ -360,7 +360,7 @@ export class LotteryService {
       const isLotteryOpenForBetting = await lotteryContract['openBets']()
 
       const currentlySetLotteryContractClosingEpoch = (
-        await lotteryContract['lotteryClosingEpochInSeconds']()
+        await lotteryContract['closingTime']()
       ).toNumber()
       const captureEpoch = currentEpoch()
 
@@ -382,7 +382,7 @@ export class LotteryService {
   async isLotteryStartAvailable() {
     try {
       const lotteryContract = await this.getLotteryContract()
-      const isLotteryOpenForBetting = await lotteryContract['lotteryOpen']()
+      const isLotteryOpenForBetting = await lotteryContract['openBets']()
       return !isLotteryOpenForBetting
     } catch (error) {
       console.log(error)
@@ -399,7 +399,7 @@ export class LotteryService {
 
       const lotteryRollTxn = await lotteryContract
         .connect(currentWallet)
-        ['endLottery']()
+        ['closeLottery']()
 
       const lotteryRollTxnReceipt = await this.provider.getTransactionReceipt(
         lotteryRollTxn.hash,
@@ -432,7 +432,7 @@ export class LotteryService {
     try {
       const lotteryContract = await this.getLotteryContract()
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
-      const unclaimedWinnings = await lotteryContract['winningStash'](
+      const unclaimedWinnings = await lotteryContract['prize'](
         await currentWallet.getAddress(),
       )
 
