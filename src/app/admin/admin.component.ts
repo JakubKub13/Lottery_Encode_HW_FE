@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit {
   })
 
   constructor(
-    private contractsService: ContractsService,
+    private contractsService: LotteryService,
     private fb: FormBuilder,
     private ngZone: NgZone,
     private router: Router,

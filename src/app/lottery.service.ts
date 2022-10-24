@@ -10,7 +10,7 @@ import calculateWinningFee from '../helpers/calculateWinningFee'
 @Injectable({
   providedIn: 'root',
 })
-export class ContractsService {
+export class LotteryService {
   currentAccount: string
   isLoggedIn: Boolean
 
@@ -21,7 +21,7 @@ export class ContractsService {
 
   contractAddressesJSON: {
     lotteryContractAddress: string
-    lotteryTokenContractAddress: string
+    // lotteryTokenContractAddress: string
   }
   lotteryContractJSON: any
   lotteryTokenContractJSON: any
