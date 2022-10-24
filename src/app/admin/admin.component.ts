@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ContractService } from '../contracts.service'
+import { LotteryService } from '../lottery.service'
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from 'angular/router';
 import { ethers } from 'ethers';
@@ -43,7 +43,9 @@ export class AdminComponent implements OnInit {
     this.isAttemptingFeeCredit = false;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const { ethereum } = window;
+    await this.contractsService.checkWalletConnection(ethereum);
   }
 
 }
