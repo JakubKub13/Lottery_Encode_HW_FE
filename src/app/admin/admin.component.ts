@@ -24,7 +24,8 @@ export class AdminComponent implements OnInit {
   isAttemptingFeeCredit: Boolean
 
   startLotteryForm = this.fb.group({
-    durationInSeconds: ['', [Validators.required]]
+    durationInSeconds: ['', [Validators.required]],
+    baseWinningWithdrawFee: ['', [Validators.required]],
   })
 
   constructor(
@@ -44,8 +45,66 @@ export class AdminComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    const { ethereum } = window;
-    await this.contractsService.checkWalletConnection(ethereum);
+    const { ethereum } = window
+    await this.contractsService.checkWalletConnection(ethereum)
+    await this.contractsService.loadContractOwner(ethereum)
+    this.isOwnerLoggedIn = this.contractsService.determineIsCurrentAccountLotteryContractOwner()
+    this.accumulatedFees = await this.contractsService.getAccumulatedFees()
+    this.isLotteryStartAvailable = await this.contractsService.isLotteryStartAvailable()
+
+    this.ownerLotteryTokenBalance = await this.contractsService.getLotteryTokenBalance(
+      ethereum,
+    )
+    this.currentWalletBalance = await this.contractsService.getWalletBalance(
+      ethereum,
+    )
+  }
+
+  async attemptLotteryStart() {
+    this.isAttemptingLotteryStart = true
+
+    const { ethereum } = window
+    const {
+      durationInSeconds,
+      baseWinningWithdrawFee,
+    } = this.startLotteryForm.value
+
+    if (!durationInSeconds || !baseWinningWithdrawFee) {
+      window.alert('Form not correctly filled - try again!')
+      this.isAttemptingLotteryStart = false
+      return
+    }
+    console.log({ durationInSeconds, baseWinningWithdrawFee })
+
+    const computedClosingTime = currentEpoch() + parseInt(durationInSeconds!)
+
+    const isStartLotterySuccess = await this.contractsService.startLottery(
+      ethereum,
+      computedClosingTime,
+      ethers.utils.parseEther(baseWinningWithdrawFee!),
+    )
+
+    if (isStartLotterySuccess) {
+      window.alert('New lottery started!')
+      this.isAttemptingLotteryStart = false
+      this.ngZone.run(() => this.router.navigate(['/']))
+    }
+
+    this.isAttemptingLotteryStart = false
+  }
+
+  async attemptFeeCredit() {
+    this.isAttemptingFeeCredit = true
+    const { ethereum } = window
+    const isFeeCreditSuccess = await this.contractsService.claimFeeCredit(
+      ethereum,
+    )
+
+    if (isFeeCreditSuccess) {
+      window.alert('Accumulates fees credit to owner!')
+      await this.ngOnInit()
+    }
+    this.isAttemptingFeeCredit = false
   }
 
 }

@@ -21,7 +21,7 @@ export class LotteryService {
 
   contractAddressesJSON: {
     lotteryContractAddress: string
-    // lotteryTokenContractAddress: string
+    lotteryTokenContractAddress: string
   }
   lotteryContractJSON: any
   lotteryTokenContractJSON: any
@@ -41,7 +41,7 @@ export class LotteryService {
     this.lotteryTokenContractJSON = LotteryTokenContractJSON
 
     // this.provider = ethers.getDefaultProvider('goerli')
-    this.provider = ethers.getDefaultProvider('http://localhost:8545')
+    this.provider = ethers.getDefaultProvider('goerli')
   }
 
   // get metamask account/signer/address
