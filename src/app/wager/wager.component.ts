@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { LotteryService } from '../lottery.service'
 import { FormBuilder, Validators } from '@angular/forms'
 import { ethers } from 'ethers'
-import bigNumberToETHString from 'src/helpers/bigNumberToETHString'
+import bigNumberToETHString from '../..//helpers/bigNumberToETHString'
 
 declare var window: any
 

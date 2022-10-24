@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ethers, BigNumber } from 'ethers'
-import bigNumberToETHString from 'src/helpers/bigNumberToETHString'
+import bigNumberToETHString from '../helpers/bigNumberToETHString'
 import * as ContractAddressesJSON from '../assets/contracts/contracts.json'
 import * as LotteryContractJSON from '../assets/contracts/lottery-contract/Lottery.json'
 import * as LotteryTokenContractJSON from '../assets/contracts/lottery-token-contract/LotteryToken.json'
