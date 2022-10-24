@@ -6,13 +6,19 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { HelpersComponent } from './helpers/helpers.component';
+import { AdminComponent } from './admin/admin.component';
+import { LandingComponent } from './landing/landing.component';
+import { WagerComponent } from './wager/wager.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     HomeComponent,
-    HelpersComponent
+    HelpersComponent,
+    AdminComponent,
+    LandingComponent,
+    WagerComponent
   ],
   imports: [
     BrowserModule,
