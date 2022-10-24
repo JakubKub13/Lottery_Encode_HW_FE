@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 import LotteryJson from "../assets/Lottery.json";
+require('dotenv').config();
 
 const LOTTERY_CONTRACT_ADDRESS = "0x9f64ab5fdD0919c6E777B07283afC88D93E785f4";
+const PRIVATE_KEY1 = process.env.PRIVATE_KEY;
 
 @Injectable({
   providedIn: 'root'
