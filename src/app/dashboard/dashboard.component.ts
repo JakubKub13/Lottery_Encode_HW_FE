@@ -6,8 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  walletAddress: string;
 
-  constructor() { }
+  constructor() { 
+    this.walletAddress = "";
+  }
 
   ngOnInit(): void {
   }
