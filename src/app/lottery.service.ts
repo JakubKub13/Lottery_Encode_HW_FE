@@ -7,15 +7,14 @@ import * as LotteryTokenContractJSON from '../assets/contracts/lottery-token-con
 import currentEpoch from '../helpers/currentEpoch'
 import calculateWinningFee from '../helpers/calculateWinningFee'
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class LotteryService {
   currentAccount: string
   isLoggedIn: Boolean
-
   contractOwner: string
-
   lotteryContractAddress: string
   lotteryTokenContractAddress: string
 
