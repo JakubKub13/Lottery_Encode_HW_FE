@@ -24,8 +24,7 @@ export class AdminComponent implements OnInit {
   isAttemptingFeeCredit: Boolean
 
   startLotteryForm = this.fb.group({
-    durationInSeconds: ['', [Validators.required]],
-    baseWinningWithdrawFee: ['', [Validators.required]],
+    durationInSeconds: ['', [Validators.required]]
   })
 
   constructor(
@@ -65,11 +64,10 @@ export class AdminComponent implements OnInit {
 
     const { ethereum } = window
     const {
-      durationInSeconds,
-      baseWinningWithdrawFee,
+      durationInSeconds
     } = this.startLotteryForm.value
 
-    if (!durationInSeconds || !baseWinningWithdrawFee) {
+    if (!durationInSeconds) {
       window.alert('Form not correctly filled - try again!')
       this.isAttemptingLotteryStart = false
       return
