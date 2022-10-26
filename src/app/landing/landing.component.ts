@@ -37,7 +37,7 @@ export class LandingComponent implements OnInit {
     this.latestLotteryWinner = await this.contractsService.getLatestLotteryWinner()
     this.closingEpochInSeconds = await this.contractsService.getClosingEpochTime()
     this.closingTimeString = new Date(
-      this.closingEpochInSeconds * 1000,
+    this.closingEpochInSeconds * 1000,
     ).toISOString()
   }
 
