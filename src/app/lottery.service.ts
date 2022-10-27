@@ -5,7 +5,6 @@ import * as ContractAddressesJSON from '../assets/contracts/contracts.json'
 import * as LotteryContractJSON from '../assets/contracts/lottery-contract/Lottery.json'
 import * as LotteryTokenContractJSON from '../assets/contracts/lottery-token-contract/LotteryToken.json'
 import currentEpoch from '../helpers/currentEpoch'
-import calculateWinningFee from '../helpers/calculateWinningFee'
 
 
 @Injectable({
@@ -431,25 +430,16 @@ export class LotteryService {
   // claim winning
   async claimWinning(
     ethereum: any,
-    unclaimedLotteryWinningBN: ethers.BigNumber,
+    //unclaimedLotteryWinningBN: ethers.BigNumber,
+    amount: Number
   ) {
     try {
-      const [, calculatedFee] = calculateWinningFee(unclaimedLotteryWinningBN)
-      console.log('calculated winning claim fee: ', calculatedFee)
-
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
       const lotteryContract = await this.getLotteryContract()
-
-      const claimWinningTxn = await lotteryContract
-        .connect(currentWallet)
-        ['withdrawWinning'](calculatedFee)
-
-      const claimWinningTxnReceipt = await this.provider.getTransactionReceipt(
-        claimWinningTxn.hash,
-      )
+      const claimWinningTxn = await lotteryContract.connect(currentWallet).prizeWithdraw(amount);
+      const claimWinningTxnReceipt = await this.provider.getTransactionReceipt(claimWinningTxn.hash)
 
       if (claimWinningTxnReceipt) return true
-
       return false
     } catch (error) {
       console.log(error)
