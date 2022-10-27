@@ -25,7 +25,7 @@ export class LotteryService {
   lotteryContractJSON: any
   lotteryTokenContractJSON: any
 
-  provider: ethers.providers.BaseProvider
+  provider: ethers.providers.BaseProvider   
 
   constructor() {
     this.currentAccount = ''
@@ -44,7 +44,7 @@ export class LotteryService {
   }
 
   // get metamask account/signer/address
-  async checkWalletConnection(ethereum: any) {
+  async checkWalletConnection(ethereum: any) {    /// Promise<string>
     try {
       if (!ethereum) {
         console.log('Install MetaMask!')
@@ -186,7 +186,6 @@ export class LotteryService {
   async startLottery(
     ethereum: any,
     closingTime: number,
-    BASE_WINNING_FEE_DEPLOY_FRIENDLY_FORMAT: BigNumber,
   ) {
     const currentWallet = await this.getMetamaskWalletSigner(ethereum)
     console.log(await currentWallet.getAddress(), this.contractOwner)

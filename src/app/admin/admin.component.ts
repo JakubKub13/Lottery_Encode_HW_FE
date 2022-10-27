@@ -72,7 +72,7 @@ export class AdminComponent implements OnInit {
       this.isAttemptingLotteryStart = false
       return
     }
-    console.log({ durationInSeconds, baseWinningWithdrawFee })
+    console.log({ durationInSeconds })
 
     const computedClosingTime = currentEpoch() + parseInt(durationInSeconds!)
 
