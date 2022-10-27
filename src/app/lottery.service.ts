@@ -328,7 +328,7 @@ export class LotteryService {
   async isLotteryStartAvailable() {
     try {
       const lotteryContract = await this.getLotteryContract()
-      const isLotteryOpenForBetting = await lotteryContract['openBets']()
+      const isLotteryOpenForBetting = await lotteryContract.betsOpen()
       return !isLotteryOpenForBetting
     } catch (error) {
       console.log(error)
@@ -342,15 +342,8 @@ export class LotteryService {
     try {
       const lotteryContract = await this.getLotteryContract()
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
-
-      const lotteryRollTxn = await lotteryContract
-        .connect(currentWallet)
-        ['closeLottery']()
-
-      const lotteryRollTxnReceipt = await this.provider.getTransactionReceipt(
-        lotteryRollTxn.hash,
-      )
-
+      const lotteryRollTxn = await lotteryContract.connect(currentWallet).closeLottery();
+      const lotteryRollTxnReceipt = await this.provider.getTransactionReceipt(lotteryRollTxn.hash);
       if (lotteryRollTxnReceipt) return true
       return false
     } catch (error) {
@@ -363,8 +356,8 @@ export class LotteryService {
   // latest lottery winner
   async getLatestLotteryWinner() {
     try {
-      const lotteryContract = await this.getLotteryContract()
-      const latestLotteryWinner = await lotteryContract['latestLotteryWinner']()
+      const lotteryContract = await this.getLotteryContract();
+      const latestLotteryWinner = await lotteryContract.latestLotteryWinner();
       return latestLotteryWinner
     } catch (error) {
       console.log(error)
@@ -378,10 +371,7 @@ export class LotteryService {
     try {
       const lotteryContract = await this.getLotteryContract()
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
-      const unclaimedWinnings = await lotteryContract['prize'](
-        await currentWallet.getAddress(),
-      )
-
+      const unclaimedWinnings = await lotteryContract.winningPrize(await currentWallet.getAddress());
       return [unclaimedWinnings, bigNumberToETHString(unclaimedWinnings)]
     } catch (error) {
       console.log(error)
@@ -395,11 +385,8 @@ export class LotteryService {
     try {
       const lotteryContract = await this.getLotteryContract()
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
-      const placeBetTxn = await lotteryContract.connect(currentWallet)['bet']()
-
-      const placeBetTxnReceipt = await this.provider.getTransactionReceipt(
-        placeBetTxn.hash,
-      )
+      const placeBetTxn = await lotteryContract.connect(currentWallet).bet();
+      const placeBetTxnReceipt = await this.provider.getTransactionReceipt(placeBetTxn.hash)
 
       if (placeBetTxnReceipt) return true
       return false
@@ -414,10 +401,7 @@ export class LotteryService {
   async getClosingEpochTime() {
     try {
       const lotteryContract = await this.getLotteryContract()
-      const currentlySetLotteryContractClosingEpoch = (
-        await lotteryContract['lotteryClosingEpochInSeconds']()
-      ).toNumber()
-
+      const currentlySetLotteryContractClosingEpoch = (await lotteryContract.closingTime()).toNumber();
       return currentlySetLotteryContractClosingEpoch
     } catch (error) {
       console.log(error)
@@ -431,17 +415,11 @@ export class LotteryService {
     try {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
       const lotteryContract = await this.getLotteryContract()
-
-      const claimFeeCreditTxn = await lotteryContract
-        .connect(currentWallet)
-        ['collectFees']()
-
-      const claimFeeCreditTxnReceipt = await this.provider.getTransactionReceipt(
-        claimFeeCreditTxn.hash,
-      )
+      const feePoolBal = await lotteryContract.lotteryFeePool();
+      const claimFeeCreditTxn = await lotteryContract.connect(currentWallet).ownerWithdrawFees(feePoolBal);
+      const claimFeeCreditTxnReceipt = await this.provider.getTransactionReceipt(claimFeeCreditTxn.hash);
 
       if (claimFeeCreditTxnReceipt) return true
-
       return false
     } catch (error) {
       console.log(error)
