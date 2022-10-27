@@ -210,16 +210,12 @@ export class LotteryService {
     try {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
       const lotteryTokenContract = await this.getLotteryTokenContract()
-
-      const currentAccountTokenBalance = await lotteryTokenContract[
-        'balanceOf'
-      ](await currentWallet.getAddress())
-
+      const currentAccountTokenBalance = await lotteryTokenContract.balanceOf(await currentWallet.getAddress());
       return bigNumberToETHString(currentAccountTokenBalance)
     } catch (error) {
       console.log('Can not get token balance: ', error)
       window.alert('Can not get token balance: ' + `${error}`)
-      return ''
+      return '0';
     }
   }
 
@@ -233,39 +229,20 @@ export class LotteryService {
 
       // run purchase function on lottery contract itself
       const lotteryContract = await this.getLotteryContract()
-      const tokenPurchaseTxn = await lotteryContract
-        .connect(currentWallet)
-        ['purchaseTokens']({
-          value: ethers.utils.parseEther(lotteryTokenAmount),
-        })
-
-      const tokenPurchaseTxnReceipt = await this.provider.getTransactionReceipt(
-        tokenPurchaseTxn.hash,
-      )
+      const tokenPurchaseTxn = await lotteryContract.connect(currentWallet).purchaseTokens({ value: ethers.utils.parseEther(lotteryTokenAmount) })
+      const tokenPurchaseTxnReceipt = await this.provider.getTransactionReceipt(tokenPurchaseTxn.hash)
 
       if (tokenPurchaseTxnReceipt) {
         // run approve on token contract
         // to approve token spending to lottery contract on behalf of the signer
-        const lotteryTokenContract = await this.getLotteryTokenContract(
-          currentWallet,
-        )
-
-        const currentTokenBalance = await lotteryTokenContract['balanceOf'](
-          await currentWallet.getAddress(),
-        )
-
-        const approveAllowanceToLotteryContractTxn = await lotteryTokenContract
-          .connect(currentWallet)
-          ['approve'](this.lotteryContractAddress, currentTokenBalance)
-
-        const approveAllowanceToLotteryContractTxnReceipt = await this.provider.getTransactionReceipt(
-          approveAllowanceToLotteryContractTxn.hash,
-        )
+        const lotteryTokenContract = await this.getLotteryTokenContract(currentWallet)
+        const currentTokenBalance = await lotteryTokenContract.balanceOf(await currentWallet.getAddress());
+        const approveAllowanceToLotteryContractTxn = await lotteryTokenContract.connect(currentWallet).approve(this.lotteryContractAddress, currentTokenBalance);
+        const approveAllowanceToLotteryContractTxnReceipt = await this.provider.getTransactionReceipt(approveAllowanceToLotteryContractTxn.hash);
 
         if (approveAllowanceToLotteryContractTxnReceipt) return true
-        return false
+        return false   //// Check this 
       }
-
       return false
     } catch (error) {
       console.log(error)
@@ -278,21 +255,10 @@ export class LotteryService {
   async forceAllowance(ethereum: any) {
     try {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
-      const lotteryTokenContract = await this.getLotteryTokenContract(
-        currentWallet,
-      )
-
-      const currentTokenBalance = await lotteryTokenContract
-        .connect(currentWallet)
-        ['balanceOf'](await currentWallet.getAddress())
-
-      const approveAllowanceToLotteryContractTxn = await lotteryTokenContract
-        .connect(currentWallet)
-        ['approve'](this.lotteryContractAddress, currentTokenBalance)
-
-      const approveAllowanceToLotteryContractTxnReceipt = await this.provider.getTransactionReceipt(
-        approveAllowanceToLotteryContractTxn.hash,
-      )
+      const lotteryTokenContract = await this.getLotteryTokenContract(currentWallet)
+      const currentTokenBalance = await lotteryTokenContract.connect(currentWallet).balanceOf(await currentWallet.getAddress())
+      const approveAllowanceToLotteryContractTxn = await lotteryTokenContract.connect(currentWallet).approve(this.lotteryContractAddress, currentTokenBalance);
+      const approveAllowanceToLotteryContractTxnReceipt = await this.provider.getTransactionReceipt(approveAllowanceToLotteryContractTxn.hash);
 
       if (approveAllowanceToLotteryContractTxnReceipt) return true
       return false
@@ -308,19 +274,11 @@ export class LotteryService {
     try {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
       const currentTokenBalance = await this.getLotteryTokenBalance(ethereum)
-
       const lotteryTokenContract = await this.getLotteryTokenContract()
       const lotteryContract = await this.getLotteryContract()
-
       const amountToBurn = currentTokenBalance
-      await lotteryContract
-        .connect(currentWallet)
-        ['trackLatestBurn'](amountToBurn)
-
-      await lotteryTokenContract.connect(currentWallet)['burn'](amountToBurn)
-
-      await lotteryContract.connect(currentWallet)['withdrawLastBurnToEther']()
-
+      await lotteryTokenContract.connect(currentWallet).approve(this.lotteryContractAddress, amountToBurn);
+      await lotteryTokenContract.connect(currentWallet).returnTokens(amountToBurn);
       return true
     } catch (error) {
       console.log(error)
@@ -332,11 +290,10 @@ export class LotteryService {
   // get accumulated fees
   async getAccumulatedFees() {
     let accumulatedFees: BigNumber
-
+  
     try {
-      const lotteryContract = await this.getLotteryContract()
-      accumulatedFees = await lotteryContract['ownerWithdraw']()
-
+      const lotteryContract = await this.getLotteryContract() 
+      accumulatedFees = await lotteryContract.lotteryFeePool()
       return bigNumberToETHString(accumulatedFees)
     } catch (error) {
       console.log(error)
@@ -349,16 +306,13 @@ export class LotteryService {
   async isLotteryRollAvailable() {
     try {
       const lotteryContract = await this.getLotteryContract()
-      const isLotteryOpenForBetting = await lotteryContract['openBets']()
-
-      const currentlySetLotteryContractClosingEpoch = (
-        await lotteryContract['closingTime']()
-      ).toNumber()
+      const isLotteryOpenForBetting = await lotteryContract.betsOpen();
+      const currentlySetLotteryContractClosingEpoch = (await lotteryContract.closingTime()).toNumber();
       const captureEpoch = currentEpoch()
 
       if (
         isLotteryOpenForBetting &&
-        currentlySetLotteryContractClosingEpoch < captureEpoch
+        currentlySetLotteryContractClosingEpoch > captureEpoch // < why
       ) {
         return true
       }
