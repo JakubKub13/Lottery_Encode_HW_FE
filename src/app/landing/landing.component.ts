@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import currentEpoch from '../../helpers/currentEpoch'
 import { LotteryService } from '../lottery.service'
 
 declare var window: any

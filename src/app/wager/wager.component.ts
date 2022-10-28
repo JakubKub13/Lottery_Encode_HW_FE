@@ -50,27 +50,17 @@ export class WagerComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.isBettingWindowOpen = await this.contractsService.isBettingWindowOpen()
-
-    const { ethereum } = window
-    this.currentLotteryTokenBalanceForCurrentWallet = await this.contractsService.getLotteryTokenBalance(
-      ethereum,
-    )
-    this.currentWalletBalance = await this.contractsService.getWalletBalance(
-      ethereum,
-    )
-    ;[
-      this.unclaimedLotteryWinningBN,
-      this.unclaimedLotteryWinning,
-    ] = await this.contractsService.getUnclaimedWinnings(ethereum)
-
+    this.isBettingWindowOpen = await this.contractsService.isBettingWindowOpen();
+    const { ethereum } = window;
+    this.currentLotteryTokenBalanceForCurrentWallet = await this.contractsService.getLotteryTokenBalance(ethereum);
+    this.currentWalletBalance = await this.contractsService.getWalletBalance(ethereum);
+    [this.unclaimedLotteryWinningBN, this.unclaimedLotteryWinning] = await this.contractsService.getUnclaimedWinnings(ethereum)
     this.isLoadingBalance = false
   }
 
   async attemptTokenPurchase() {
     this.isAttemptingToPurchaseTokens = true
     const { ethereum } = window
-
     const { lotteryTokenAmount } = this.buyTokensForm.value
 
     if (Number.isNaN(parseFloat(lotteryTokenAmount!))) {
@@ -79,10 +69,7 @@ export class WagerComponent implements OnInit {
       this.isAttemptingToPurchaseTokens = false
     }
 
-    const isPurchaseSuccess = await this.contractsService.purchaseLotteryTokens(
-      ethereum,
-      lotteryTokenAmount!,
-    )
+    const isPurchaseSuccess = await this.contractsService.purchaseLotteryTokens(ethereum, lotteryTokenAmount!)  // check this
 
     if (isPurchaseSuccess) {
       window.alert('Token purchase successful!')
