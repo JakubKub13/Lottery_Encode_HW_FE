@@ -209,7 +209,7 @@ export class LotteryService {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)
       const lotteryTokenContract = await this.getLotteryTokenContract()
       const currentAccountTokenBalance = await lotteryTokenContract.balanceOf(await currentWallet.getAddress());
-      return bigNumberToETHString(currentAccountTokenBalance)
+      return bigNumberToETHString(currentAccountTokenBalance) 
     } catch (error) {
       console.log('Can not get token balance: ', error)
       window.alert('Can not get token balance: ' + `${error}`)
@@ -275,9 +275,9 @@ export class LotteryService {
       const currentTokenBalance = await this.getLotteryTokenBalance(ethereum)
       const lotteryTokenContract = await this.getLotteryTokenContract()
       const lotteryContract = await this.getLotteryContract()
-      const amountToBurn = currentTokenBalance
+      const amountToBurn = await lotteryTokenContract.balanceOf(await currentWallet.getAddress())
       await lotteryTokenContract.connect(currentWallet).approve(this.lotteryContractAddress, amountToBurn);
-      await lotteryTokenContract.connect(currentWallet).returnTokens(amountToBurn);
+      await lotteryContract.connect(currentWallet).returnTokens(amountToBurn);
       return true
     } catch (error) {
       console.log(error)
