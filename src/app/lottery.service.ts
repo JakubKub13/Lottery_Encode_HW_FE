@@ -430,7 +430,7 @@ export class LotteryService {
   async claimWinning(
     ethereum: any,
     //unclaimedLotteryWinningBN: ethers.BigNumber,
-    amount: Number
+    amount: ethers.BigNumber
   ) {
     try {
       const currentWallet = await this.getMetamaskWalletSigner(ethereum)

@@ -93,7 +93,6 @@ export class WagerComponent implements OnInit {
   async attemptPlacingBets() {
     this.isPlacingBet = true
     const { ethereum } = window
-
     const isPlacingBetSuccess = await this.contractsService.placeBets(ethereum)
 
     if (isPlacingBetSuccess) {
@@ -107,10 +106,7 @@ export class WagerComponent implements OnInit {
     const { ethereum } = window
     this.isClaimingWinning = true
 
-    const isWinningClaimSuccess = await this.contractsService.claimWinning(
-      ethereum,
-      this.unclaimedLotteryWinningBN,
-    )
+    const isWinningClaimSuccess = await this.contractsService.claimWinning(ethereum, this.unclaimedLotteryWinningBN)
 
     if (isWinningClaimSuccess) {
       window.alert('Claimed winning successfully!')
