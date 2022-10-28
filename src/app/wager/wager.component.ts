@@ -73,10 +73,7 @@ export class WagerComponent implements OnInit {
 
     if (isPurchaseSuccess) {
       window.alert('Token purchase successful!')
-
-      this.currentWalletBalance = await this.contractsService.getWalletBalance(
-        ethereum,
-      )
+      this.currentWalletBalance = await this.contractsService.getWalletBalance(ethereum)
     } else window.alert('Token purchase unsuccessful - please try later!')
     this.isAttemptingToPurchaseTokens = false
     await this.ngOnInit()
@@ -85,14 +82,11 @@ export class WagerComponent implements OnInit {
   async attemptTokenRedemption() {
     this.isAttemptingTokenRedemption = true
     const { ethereum } = window
-
-    const ifRedemptionSuccess = await this.contractsService.redeemTokensToETH(
-      ethereum,
-    )
+    const ifRedemptionSuccess = await this.contractsService.redeemTokensToETH(ethereum)
     if (ifRedemptionSuccess) {
       window.alert('Redemption was successful!')
       await this.ngOnInit()
-    }
+    } else window.alert('Token burn unsuccessful - please try later!')
     this.isAttemptingTokenRedemption = false
   }
 
