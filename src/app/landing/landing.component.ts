@@ -44,9 +44,7 @@ export class LandingComponent implements OnInit {
   async rollLottery() {
     this.isAttemptingLotteryRoll = true
     const { ethereum } = window
-    const isLotteryRollSuccess = await this.contractsService.rollLottery(
-      ethereum,
-    )
+    const isLotteryRollSuccess = await this.contractsService.rollLottery(ethereum);
     if (isLotteryRollSuccess) {
       window.alert('Lottery roll successful!')
       await this.ngOnInit()

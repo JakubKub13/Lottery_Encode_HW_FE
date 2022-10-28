@@ -417,7 +417,7 @@ export class LotteryService {
       const claimFeeCreditTxn = await lotteryContract.connect(currentWallet).ownerWithdrawFees(feePoolBal);
       const claimFeeCreditTxnReceipt = await this.provider.getTransactionReceipt(claimFeeCreditTxn.hash);
 
-      if (claimFeeCreditTxnReceipt) return true
+      if (claimFeeCreditTxnReceipt) return true    /// --check
       return false
     } catch (error) {
       console.log(error)

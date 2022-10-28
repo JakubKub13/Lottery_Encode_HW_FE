@@ -52,9 +52,7 @@ export class AdminComponent implements OnInit {
     this.isLotteryStartAvailable = await this.contractsService.isLotteryStartAvailable()
 
     this.ownerLotteryTokenBalance = await this.contractsService.getLotteryTokenBalance(ethereum);
-    this.currentWalletBalance = await this.contractsService.getWalletBalance(
-      ethereum,
-    )
+    this.currentWalletBalance = await this.contractsService.getWalletBalance(ethereum)
   }
 
   async attemptLotteryStart() {
@@ -86,15 +84,12 @@ export class AdminComponent implements OnInit {
   async attemptFeeCredit() {
     this.isAttemptingFeeCredit = true
     const { ethereum } = window
-    const isFeeCreditSuccess = await this.contractsService.claimFeeCredit(
-      ethereum,
-    )
+    const isFeeCreditSuccess = await this.contractsService.claimFeeCredit(ethereum)
 
     if (isFeeCreditSuccess) {
-      window.alert('Accumulates fees credit to owner!')
+      window.alert('Sending fees to owner!')
       await this.ngOnInit()
     }
     this.isAttemptingFeeCredit = false
   }
-
 }
