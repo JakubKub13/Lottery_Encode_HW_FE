@@ -105,22 +105,18 @@ export class WagerComponent implements OnInit {
   async attemptWinningClaim() {
     const { ethereum } = window
     this.isClaimingWinning = true
-
     const isWinningClaimSuccess = await this.contractsService.claimWinning(ethereum, this.unclaimedLotteryWinningBN)
 
     if (isWinningClaimSuccess) {
       window.alert('Claimed winning successfully!')
       await this.ngOnInit()
     }
-
     this.isClaimingWinning = false
   }
 
   async forceAllowance() {
     const { ethereum } = window
-    const isForceAllowanceSuccess = await this.contractsService.forceAllowance(
-      ethereum,
-    )
+    const isForceAllowanceSuccess = await this.contractsService.forceAllowance(ethereum);
 
     if (isForceAllowanceSuccess) {
       window.alert('Force allowance txn successful - try to bet again!')
