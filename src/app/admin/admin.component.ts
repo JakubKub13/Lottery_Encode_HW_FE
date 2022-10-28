@@ -51,9 +51,7 @@ export class AdminComponent implements OnInit {
     this.accumulatedFees = await this.contractsService.getAccumulatedFees()
     this.isLotteryStartAvailable = await this.contractsService.isLotteryStartAvailable()
 
-    this.ownerLotteryTokenBalance = await this.contractsService.getLotteryTokenBalance(
-      ethereum,
-    )
+    this.ownerLotteryTokenBalance = await this.contractsService.getLotteryTokenBalance(ethereum);
     this.currentWalletBalance = await this.contractsService.getWalletBalance(
       ethereum,
     )
@@ -63,9 +61,7 @@ export class AdminComponent implements OnInit {
     this.isAttemptingLotteryStart = true
 
     const { ethereum } = window
-    const {
-      durationInSeconds
-    } = this.startLotteryForm.value
+    const { durationInSeconds } = this.startLotteryForm.value
 
     if (!durationInSeconds) {
       window.alert('Form not correctly filled - try again!')
@@ -76,11 +72,7 @@ export class AdminComponent implements OnInit {
 
     const computedClosingTime = currentEpoch() + parseInt(durationInSeconds!)
 
-    const isStartLotterySuccess = await this.contractsService.startLottery(
-      ethereum,
-      computedClosingTime,
-      ethers.utils.parseEther(baseWinningWithdrawFee!),
-    )
+    const isStartLotterySuccess = await this.contractsService.startLottery(ethereum, computedClosingTime)
 
     if (isStartLotterySuccess) {
       window.alert('New lottery started!')

@@ -38,7 +38,6 @@ export class LotteryService {
     this.lotteryContractJSON = LotteryContractJSON
     this.lotteryTokenContractJSON = LotteryTokenContractJSON
 
-    // this.provider = ethers.getDefaultProvider('goerli')
     this.provider = ethers.getDefaultProvider('goerli')
   }
 
@@ -190,13 +189,13 @@ export class LotteryService {
       this.contractOwner.toLowerCase().trim()
     ) {
       window.alert('Only owner allowed to start lottery!')
-      return
-    }
+      return  false;  /// ---check
+    } 
 
     try {
       const lotteryContract = await this.getLotteryContract()
       const startLotteryTxn = await lotteryContract.connect(currentWallet).openBets(closingTime)
-      return [startLotteryTxn.hash]
+      return true   //[startLotteryTxn.hash]
     } catch (error) {
       console.log(error)
       window.alert(error)
