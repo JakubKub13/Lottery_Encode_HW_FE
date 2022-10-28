@@ -38,7 +38,7 @@ export class LotteryService {
     this.lotteryContractJSON = LotteryContractJSON
     this.lotteryTokenContractJSON = LotteryTokenContractJSON
 
-    this.provider = ethers.getDefaultProvider('goerli')
+    this.provider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/UYC8suTjPixZ8Ku7w4YQcEUuLGwKqP70")
   }
 
   // get metamask account/signer/address
@@ -237,11 +237,12 @@ export class LotteryService {
         const currentTokenBalance = await lotteryTokenContract.balanceOf(await currentWallet.getAddress());
         const approveAllowanceToLotteryContractTxn = await lotteryTokenContract.connect(currentWallet).approve(this.lotteryContractAddress, currentTokenBalance);
         const approveAllowanceToLotteryContractTxnReceipt = await this.provider.getTransactionReceipt(approveAllowanceToLotteryContractTxn.hash);
-
         if (approveAllowanceToLotteryContractTxnReceipt) return true
-        return false   //// Check this 
+        return false 
+         //// Check this 
       }
-      return false
+      return true;
+       
     } catch (error) {
       console.log(error)
       window.alert(error)
