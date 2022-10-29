@@ -311,7 +311,7 @@ export class LotteryService {
 
       if (
         isLotteryOpenForBetting &&
-        currentlySetLotteryContractClosingEpoch > captureEpoch // < why
+        currentlySetLotteryContractClosingEpoch < captureEpoch // < why
       ) {
         return true
       }
