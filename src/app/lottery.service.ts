@@ -418,7 +418,7 @@ export class LotteryService {
       const claimFeeCreditTxn = await lotteryContract.connect(currentWallet).ownerWithdrawFees(feePoolBal);
       const claimFeeCreditTxnReceipt = await this.provider.getTransactionReceipt(claimFeeCreditTxn.hash);
 
-      if (claimFeeCreditTxnReceipt) return true    /// --check
+      if (claimFeeCreditTxnReceipt) return true    
       return false
     } catch (error) {
       console.log(error)
@@ -430,7 +430,6 @@ export class LotteryService {
   // claim winning
   async claimWinning(
     ethereum: any,
-    //unclaimedLotteryWinningBN: ethers.BigNumber,
     amount: ethers.BigNumber
   ) {
     try {
