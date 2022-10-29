@@ -2,7 +2,6 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { LotteryService } from '../lottery.service'
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ethers } from 'ethers';
 import currentEpoch from '../../helpers/currentEpoch';
 
 declare var window: any
