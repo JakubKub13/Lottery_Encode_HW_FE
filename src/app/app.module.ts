@@ -6,6 +6,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LandingComponent } from './landing/landing.component';
 import { WagerComponent } from './wager/wager.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    NgbModule,
     AppRoutingModule,
     ReactiveFormsModule,
   ],
